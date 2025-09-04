@@ -17,6 +17,9 @@ const RightPanel = ({ selectedArea, selectedCharacter, onSimulateEdit }) => {
         }
     ]);
     const [inputMessage, setInputMessage] = useState('');
+    const [showQuestionResult, setShowQuestionResult] = useState(false);
+    const [questionResult, setQuestionResult] = useState(null);
+    const [isVideoEnabled, setIsVideoEnabled] = useState(false);
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -43,6 +46,12 @@ const RightPanel = ({ selectedArea, selectedCharacter, onSimulateEdit }) => {
         addMessage(message, 'user');
         setInputMessage('');
 
+        // Handle question request
+        if (message.includes('?') || message.includes('질문') || message.includes('뭐') || message.includes('어떻게')) {
+            handleQuestionRequest(message);
+            return;
+        }
+
         // Handle background request
         if (message.includes('배경')) {
             addMessage('배경 이미지를 추가하겠습니다.', 'ai');
@@ -62,6 +71,24 @@ const RightPanel = ({ selectedArea, selectedCharacter, onSimulateEdit }) => {
         setTimeout(() => {
             processAIRequest(message);
         }, 1000);
+    };
+
+    const handleQuestionRequest = (question) => {
+        addMessage('질문을 분석하고 있습니다...', 'ai');
+        
+        setTimeout(() => {
+            // 질문 결과 시뮬레이션
+            const result = {
+                question: question,
+                answer: '선택된 영역에 대한 질문에 답변드리겠습니다.',
+                image: './test2.jpg',
+                confidence: 0.85
+            };
+            
+            setQuestionResult(result);
+            setShowQuestionResult(true);
+            addMessage('질문 분석이 완료되었습니다. 결과를 확인해주세요.', 'ai');
+        }, 2000);
     };
 
     const processAIRequest = (request) => {
@@ -100,6 +127,25 @@ const RightPanel = ({ selectedArea, selectedCharacter, onSimulateEdit }) => {
         }
     };
 
+    const handleConfirmQuestion = () => {
+        setShowQuestionResult(false);
+        setIsVideoEnabled(true);
+        addMessage('질문 결과가 확인되었습니다. 이제 영상을 만들 수 있습니다!', 'ai');
+    };
+
+    const handleCancelQuestion = () => {
+        setShowQuestionResult(false);
+        setQuestionResult(null);
+        addMessage('질문 결과를 취소했습니다.', 'ai');
+    };
+
+    const handleCreateVideo = () => {
+        addMessage('영상 생성을 시작합니다...', 'ai');
+        setTimeout(() => {
+            addMessage('영상이 성공적으로 생성되었습니다! 🎬', 'ai');
+        }, 3000);
+    };
+
     return (
         <div className="right-panel">
             <div className="chat-header">
@@ -120,10 +166,44 @@ const RightPanel = ({ selectedArea, selectedCharacter, onSimulateEdit }) => {
                 <div ref={messagesEndRef} />
             </div>
 
+            {/* 질문 결과 섹션 */}
+            {showQuestionResult && questionResult && (
+                <div className="question-result">
+                    <h3>📋 질문 결과</h3>
+                    <div className="question-content">
+                        <p><strong>질문:</strong> {questionResult.question}</p>
+                        <p><strong>답변:</strong> {questionResult.answer}</p>
+                        <div className="result-image">
+                            <img src={questionResult.image} alt="질문 결과" />
+                        </div>
+                        <div className="confidence">
+                            신뢰도: {Math.round(questionResult.confidence * 100)}%
+                        </div>
+                    </div>
+                    <div className="question-actions">
+                        <button className="confirm-button" onClick={handleConfirmQuestion}>
+                            ✅ 확인
+                        </button>
+                        <button className="cancel-button" onClick={handleCancelQuestion}>
+                            ❌ 취소
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* 영상 만들기 버튼 */}
+            {isVideoEnabled && (
+                <div className="video-section">
+                    <button className="video-button" onClick={handleCreateVideo}>
+                        🎬 영상으로 만들기
+                    </button>
+                </div>
+            )}
+
             <div className="chat-input-area">
                 <textarea 
                     className="chat-input" 
-                    placeholder="여기에 편집 요청을 입력하세요... 예: '이 캐릭터의 표정을 화난 표정으로 바꿔주세요'"
+                    placeholder="여기에 편집 요청이나 질문을 입력하세요... 예: '이 캐릭터의 표정을 화난 표정으로 바꿔주세요' 또는 '이 캐릭터는 누구인가요?'"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -133,7 +213,7 @@ const RightPanel = ({ selectedArea, selectedCharacter, onSimulateEdit }) => {
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
                 >
-                    편집 요청 보내기
+                    요청 보내기
                 </button>
             </div>
         </div>

@@ -680,3 +680,134 @@ body {
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
+
+/* 질문 결과 스타일 */
+.question-result {
+    background: #2d2d2d;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    animation: slideIn 0.3s ease-out;
+}
+
+.question-result h3 {
+    color: #4CAF50;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.question-content {
+    margin-bottom: 15px;
+}
+
+.question-content p {
+    margin-bottom: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.question-content strong {
+    color: #fff;
+}
+
+.result-image {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.result-image img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 4px;
+    border: 1px solid #555;
+}
+
+.confidence {
+    font-size: 11px;
+    color: #4CAF50;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.question-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.confirm-button, .cancel-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.confirm-button {
+    background: #4CAF50;
+    color: white;
+}
+
+.confirm-button:hover {
+    background: #45a049;
+}
+
+.cancel-button {
+    background: #f44336;
+    color: white;
+}
+
+.cancel-button:hover {
+    background: #da190b;
+}
+
+/* 영상 만들기 버튼 스타일 */
+.video-section {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.video-button {
+    background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: videoButtonPulse 2s infinite;
+}
+
+.video-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes videoButtonPulse {
+    0% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+    }
+    100% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+}
