@@ -31,6 +31,8 @@ const CanvasContainer = ({
     const [statusMessage, setStatusMessage] = useState('');
     const [showStatus, setShowStatus] = useState(false);
     const [objectId, setObjectId] = useState(0);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadComplete, setUploadComplete] = useState(false);
 
     // Canvas context
     const [ctx, setCtx] = useState(null);
@@ -492,13 +494,33 @@ const CanvasContainer = ({
         }
     };
 
-    const handleExportImage = () => {
-        const canvas = canvasRef.current;
-        const link = document.createElement('a');
-        link.download = 'webtoon.png';
-        link.href = canvas.toDataURL();
-        link.click();
-        showStatusMessage('이미지가 다운로드되었습니다.');
+    const handleExportImage = async () => {
+        if (isUploading) return;
+        
+        setIsUploading(true);
+        setUploadComplete(false);
+        
+        // 검열 중 로딩 표시
+        showStatusMessage('🔍 검열 중...');
+        
+        try {
+            // 실제 업로드 시뮬레이션 (2-3초 대기)
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            
+            // 업로드 완료 표시
+            setUploadComplete(true);
+            showStatusMessage('✅ 업로드 완료!');
+            
+            // 3초 후 상태 초기화
+            setTimeout(() => {
+                setIsUploading(false);
+                setUploadComplete(false);
+            }, 3000);
+            
+        } catch (error) {
+            setIsUploading(false);
+            showStatusMessage('❌ 업로드 실패');
+        }
     };
 
     return (
@@ -512,8 +534,24 @@ const CanvasContainer = ({
                 <button className="tool-button" onClick={handleClearCanvas}>
                     🗑️ 전체 지우기
                 </button>
-                <button className="tool-button" onClick={handleExportImage}>
-                    💾 내보내기 <span className="shortcut">Ctrl+S</span>
+                <button 
+                    className={`tool-button ${isUploading ? 'uploading' : ''} ${uploadComplete ? 'upload-complete' : ''}`} 
+                    onClick={handleExportImage}
+                    disabled={isUploading}
+                >
+                    {isUploading ? (
+                        <>
+                            🔍 검열 중... <span className="loading-spinner">⏳</span>
+                        </>
+                    ) : uploadComplete ? (
+                        <>
+                            ✅ 업로드 완료
+                        </>
+                    ) : (
+                        <>
+                            📤 업로드 <span className="shortcut">Ctrl+S</span>
+                        </>
+                    )}
                 </button>
             </div>
 

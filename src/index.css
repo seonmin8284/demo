@@ -645,3 +645,38 @@ body {
 .modal-button:hover {
     opacity: 0.8;
 }
+
+/* 업로드 버튼 스타일 */
+.tool-button.uploading {
+    background: #ff6b35;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.tool-button.upload-complete {
+    background: #4caf50;
+    color: white;
+    animation: successPulse 0.5s ease-in-out;
+}
+
+.tool-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+    margin-left: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes successPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
