@@ -2,7 +2,7 @@
   "name": "webtoon-ai-editor",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://YOUR_USERNAME.github.io/YOUR_REPOSITORY_NAME",
+  "homepage": "https://seonmin8284.github.io/demo",
   "description": "웹툰 AI 에디터 - React로 변환된 버전",
   "dependencies": {
     "react": "^18.2.0",
